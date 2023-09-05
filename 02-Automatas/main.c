@@ -23,14 +23,33 @@ const int matriz[7][6] = {
     {6,     6,      6,      6,      6,      6}  // q6 ERROR
 };
 
-//void contadorConstantesEnteras(FILE* f, int decimal, int octal, int hexadecimal){
-
-//}
+int leerInput(FILE *f, char cadena[]) {
+    int i = 0;
+    while(feof(f) == 0){
+        cadena[i] = fgetc(f);
+        i++;
+    }
+    return i;
+}
 
 int main(){
     printf("Hello World \n");
 
     FILE *f = fopen("input.txt", "r");
+
+    if(f == NULL){
+        printf("Error al abrir el archivo de input.txt");
+        return 1;
+    }
+    printf("Archivo de input.txt leido exitosamente\n");
+    char cadena[20];
+
+    int cantidadCaracteres = leerInput(f, cadena);
+    fclose(f);
+    for(int i=0 ; i < cantidadCaracteres; i++){
+        printf("%c \n", cadena[i]);
+    }
+    
 
     // Prueba de punto 2
     char caracter = '1';
