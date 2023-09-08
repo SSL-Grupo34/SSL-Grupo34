@@ -17,16 +17,11 @@ typedef struct contador
     int decimales,octales,hexadecimales;
 }contador;
 
-int leerInput(FILE *f, char cadena[]) { // Leo la cadena en el file y la guardo en la variable cadena
-    int i = 0;
-    while(feof(f) == 0){
-        cadena[i] = fgetc(f);
-        i++;
-    }
-    return i;
+void leerInput(FILE *f, char cadena[]) { // Leo la cadena en el file y la guardo en la variable cadena
+    fscanf(f, "%s", cadena);
 }
 
-const int matriz[6][5] = {
+const int matriz[7][6] = {
 //  0   [1-7]   [8-9]   [a-f]   [xX]    [error]  
     {1,     2,      2,      6,      6,      6}, // q0 estado inicial
     {5,     5,      6,      6,      3,      6}, // q1 final OCTAL en 0
@@ -57,12 +52,11 @@ int columnaQuePertenece(char caracter){ // Analizo a que columna pertenece el ca
 	return 5; // Si no pertenece a ninguno, retorno la columna [Error]
 }
 
-int recorrerMatriz(char cadena[]){
-
+int recorrerMatriz(char cadena[], int largoCadena){
 	int contadorCadena, fila = 0, columna;
 	char caracter;
 
-  	for(contadorCadena=0; contadorCadena<strlen(cadena); contadorCadena++){
+  	for(contadorCadena=0; contadorCadena < largoCadena; contadorCadena++){
     	caracter = cadena[contadorCadena];
 		columna = columnaQuePertenece(caracter);	
 			
@@ -80,33 +74,36 @@ int recorrerMatriz(char cadena[]){
   	return fila; // Una vez recorrida toda la matriz devuelvo la fila final donde se encuentra correspondiente al estado final
 }
 
-void resultadoCadena(char cadena[], contador numeros){ // Analizo el resultado de recorrerMatriz y determino a que entero pertenece
-	int estadoFinal = recorrerMatriz (cadena);
-	switch(estadoFinal){
+void resultadoCadena(char cadena[], int* numerosDecimales, int* numerosOctales, int* numerosHexadecimales){ // Analizo el resultado de recorrerMatriz y determino a que entero pertenece
+    int largoCadena = strlen(cadena);
+	int estadoFinal = recorrerMatriz (cadena, largoCadena);
+	
+    printf("Analisis de constantes:\n");
+    switch(estadoFinal){
 		case 1:
-    		printf("\n %s OCTAL", cadena);
-            numeros.octales++;
+    		printf("\n %s OCTAL\n", cadena);
+            (*numerosOctales)++;
     		break;
     	case 2:
-    		printf("\n %s DECIMAL", cadena);
-            numeros.decimales++;
+    		printf("\n %s DECIMAL\n", cadena);
+            (*numerosDecimales)++;
 			break;
     	case 3:
-    		printf("\n %s ERROR LEXICO ", cadena);
+    		printf("\n %s ERROR LEXICO\n", cadena);
     		break;
     	case 4:
-    		printf("\n %s HEXADECIMAL", cadena);
-            numeros.hexadecimales++;
+    		printf("\n %s HEXADECIMAL\n", cadena);
+            (*numerosHexadecimales)++;
     		break;
     	case 5:
-    		printf("\n %s OCTAL", cadena);
-            numeros.octales++;
+    		printf("\n %s OCTAL\n", cadena);
+            (*numerosOctales)++;
     		break;
     	case 6:
-    		printf("\n %s ERROR LEXICO", cadena);
+    		printf("\n %s ERROR LEXICO\n", cadena);
     		break;
     	default:
-    		printf("\n %s ERROR LEXICO", cadena);
+    		printf("\n %s ERROR LEXICO\n", cadena);
     	break;
 	}
 }
@@ -121,24 +118,22 @@ int main(){
         return 1;
     } else {
         printf("Archivo de input.txt leido exitosamente\n");
-
     }
 
     char cadena[50]; // Se elige 50 arbitrariamente como tamanio maximo de la cadena de entrada
-    char* centinela="&"; // Determino el caracter de corte
-    contador numeros; // Se setea en 0 los contadores de las constantes
-    numeros.decimales = 0;
-    numeros.octales = 0;
-    numeros.hexadecimales = 0;
- 
-    int cantidadCaracteres = leerInput(f, cadena);
+    //char centinela = '&'; // Determino el caracter de corte
+    int numerosDecimales = 0, numerosOctales = 0, numerosHexadecimales = 0; // Declaracion de los contadores de Constantes Enteras
+
+    leerInput(f, cadena);
     fclose(f);
 
-    for(int i=0 ; i < cantidadCaracteres; i++){ // Para verificar correcta lectura de caracteres
-        printf("%c \n", cadena[i]);
-    }
-
     // TODO: implementar la lectura de todas las cadenas
+    resultadoCadena(cadena, &numerosDecimales, &numerosOctales, &numerosHexadecimales);
+
+
+
+    printf("\n Enteros decimales: %d\n Enteros octales: %d\n Enteros decimales: %d\n", numerosDecimales, numerosOctales, numerosHexadecimales);
+
 
     // Prueba de punto 2
     char caracter = '1';
