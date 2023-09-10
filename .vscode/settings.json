@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "automataenteros.c": "cpp"
+        "automataenteros.c": "cpp",
+        "automataenteros.h": "c"
     }
 }
