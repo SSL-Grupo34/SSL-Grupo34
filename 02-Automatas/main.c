@@ -14,51 +14,62 @@ int conversionCaracterInt(char caracter){
 
 /* PUNTO 1 */
 
-int matriz [7][6] = {
-//   0   [1-7]   [8,9]   [a-f]    [xX]  [ERROR]
-    {1,      2,      2,      6,      6,      6}, // q0 Estado inicial
-    {5,      5,      6,      6,      3,      6}, // q1 Estado final de DECIMAL con 0
-    {2,      2,      2,      6,      6,      6}, // q2 Estado final de DECIMAL
-    {4,      4,      4,      4,      6,      6}, // q3
-    {4,      4,      4,      4,      6,      6}, // q4 Estado final de HEXADECIMAL
-    {5,      5,      6,      6,      6,      6}, // q5 Estado final de OCTAL
-    {6,      6,      6,      6,      6,      6}  // q6 Estado de ERROR
+
+int matrizEnteros [8][7] = {
+//   +-     0   [1-7]   [8,9]   [a-f]    [xX]  [ERROR]
+    {1,     7,      7,      7,      7,      7,      7}, // q0 Estado inicial con signo
+    {7,     2,      3,      3,      7,      7,      7}, // q1 Estado inicial sin signo
+    {7,     6,      6,      7,      7,      4,      7}, // q2 Estado final de DECIMAL con 0
+    {7,     3,      3,      3,      7,      7,      7}, // q3 Estado final de DECIMAL
+    {7,     5,      5,      5,      5,      7,      7}, // q4
+    {7,     5,      5,      5,      5,      7,      7}, // q5 Estado final de HEXADECIMAL
+    {7,     6,      6,      7,      7,      7,      7}, // q6 Estado final de OCTAL                                                                 
+    {7,     7,      7,      7,      7,      7,      7}  // q7 Estado de ERROR
 };
 
 
 int columnaQuePertenece(char caracter){ 
-	if(caracter =='0'){ 
-    	return 0;
+	if (caracter == '-' || caracter == '+'){
+        return 0;
     }
-    else if(caracter == '1' || caracter == '2' ||caracter == '3' ||caracter == '4' ||caracter == '5' ||caracter == '6' ||caracter == '7'){
+    else if (caracter =='0'){ 
     	return 1;
     }
+    else if(caracter == '1' || caracter == '2' ||caracter == '3' ||caracter == '4' ||caracter == '5' ||caracter == '6' ||caracter == '7'){
+    	return 2;
+    }
     else if(caracter== '8' || caracter == '9'){
-       	return 2;
+       	return 3;
     }
     else if(caracter== 'a' ||caracter == 'A' ||caracter == 'b' ||caracter == 'B' ||caracter =='c' ||caracter == 'C'||caracter == 'd' ||caracter == 'D' ||caracter == 'e' ||caracter == 'E' ||caracter == 'f' ||caracter == 'F'){
-    	return 3;
-    }
-    else if(caracter =='x' || caracter == 'X'){
     	return 4;
     }
-	return 5;
+    else if(caracter =='x' || caracter == 'X'){
+    	return 5;
+    }
+	return 6;
 }
 
 
-int recorrerMatriz(char cadena[], int matriz[7][6]){
+int recorrerMatriz(char cadena[], int matriz[8][7]){
 	int cont_cadena, fila, columna, largoCadena;
 	char caracter;
-  	fila = 0;
-    largoCadena = strlen(cadena);
+
+    if(cadena[0] == '-' || cadena[0] == '+'){ // Asigno la primera fila por donde voy a empezar a analizar
+        fila = 0;
+    } else {
+        fila = 1;
+    }
+
+    largoCadena = strlen(cadena);   //Obtengo el largo de la cadena a evaluar
 
   	for(cont_cadena=0; cont_cadena < largoCadena; cont_cadena++){
-    	caracter = cadena[cont_cadena];
-		columna=columnaQuePertenece(caracter);	
+    	caracter = cadena[cont_cadena]; 
+		columna = columnaQuePertenece(caracter); // Analizo a que columna pertenece el caracter de la cadena
 			
-    	if(matriz[fila][columna] == 6)
+    	if(matriz[fila][columna] == 7) // Si la columna es la 7 devuelvo directamente el estado ERROR
 		{
-			return 6;
+			return 7;
 		}
 		else
 		{
@@ -69,27 +80,31 @@ int recorrerMatriz(char cadena[], int matriz[7][6]){
 }
 
 
-void definirConstante(char cadena[], int matriz[7][6]){
+void contadorConstantes(char cadena[], int matriz[8][7], int* decimales, int* octales, int* hexadecimales){
 
-	int estadoFinal= recorrerMatriz (cadena,matriz);
+	int estadoFinal= recorrerMatriz (cadena, matriz);
 
 	switch(estadoFinal){
-		case 1:
+		case 2:
     		printf("%s DECIMAL\n", cadena);
+            (*decimales)++;
     		break;
-    	case 2:
-    		printf("%s DECIMAL\n", cadena);
-			break;
     	case 3:
+    		printf("%s DECIMAL\n", cadena);
+            (*decimales)++;
+			break;
+    	case 4:
     		printf("%s ERORR LEXICO\n", cadena);
     		break;
-    	case 4:
-    		printf("%s HEXADECIMAL\n", cadena);
-    		break;
     	case 5:
-    		printf("%s OCTAL\n", cadena);
+    		printf("%s HEXADECIMAL\n", cadena);
+            (*hexadecimales)++;
     		break;
     	case 6:
+    		printf("%s OCTAL\n", cadena);
+            (*octales)++;
+    		break;
+    	case 7:
     		printf("%s ERORR LEXICO\n", cadena);
     		break;
     	default:
@@ -99,13 +114,11 @@ void definirConstante(char cadena[], int matriz[7][6]){
 }
 
 
-
-
-
 int main(){
-    char input[20] = "input.txt";
+    char input[20] = "input.txt"; // Archivo de lectura de entrada
     char cadena[100];       // Numero maximo de caracteres que puede leer = 100
-    char* centinela= "&";   // Caracter centinela que divide cadenas
+    char* centinela= "$";   // Caracter centinela que divide cadenas
+    int decimales = 0, octales = 0, hexadecimales = 0;
 
     FILE* entrada;
     entrada = fopen(input,"rt");
@@ -122,10 +135,11 @@ int main(){
     printf("\nProcesamiento de enteros:\n\n");
 	if(token!=NULL){
 		while(token!=NULL){
-			definirConstante(token, matriz);
+			contadorConstantes(token, matrizEnteros, &decimales, &octales, &hexadecimales); // Analizo la primera cadena y repito hasta que no queden cadenas por evaluar
 			token = strtok(NULL, centinela);
 		}
 	}
+    printf("\nResultados:\nEnteros Decimales = %d\nEnteros Octales = %d\nEnteros Hexadecimales = %d\n", decimales, octales, hexadecimales);
 
 	return 0;
 }
