@@ -9,6 +9,7 @@ int conversionCaracterInt(char caracter){
     return atoi(caracterConvertir);
 }
 
+/*  */ 
 
 int main(){
     char input[20] = "input.txt"; // Archivo de lectura de entrada
@@ -37,6 +38,9 @@ int main(){
 		}
 	}
     printf("\nResultados:\nEnteros Decimales = %d\nEnteros Octales = %d\nEnteros Hexadecimales = %d\n\n", decimales, octales, hexadecimales);
+
+    /* AUTOMATA 2 */ 
+    char inputManual[30];
 
 	return 0;
 }
