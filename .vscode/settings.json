@@ -2,6 +2,7 @@
     "files.associations": {
         "automataenteros.c": "cpp",
         "automataenteros.h": "c",
-        "automataCalculadora.C": "cpp"
+        "automataCalculadora.C": "cpp",
+        "conversorcharint.c": "cpp"
     }
 }

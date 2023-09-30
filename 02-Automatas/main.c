@@ -1,23 +1,14 @@
-#include "automataEnteros.h"
+#include "automataCalculadora.h"
 
-/* PUNTO 2 */ 
-
-int conversionCaracterInt(char caracter){
-    char buffer[0];
-    char* caracterConvertir = buffer;
-    *caracterConvertir = caracter;
-    return atoi(caracterConvertir);
-}
-
-/*  */ 
 
 int main(){
+
+    /* AUTOMATA 1 */ 
+
     char input[20] = "input.txt"; // Archivo de lectura de entrada
     char cadena[100];       // Numero maximo de caracteres que puede leer = 100
     char* centinela= "$";   // Caracter centinela que divide cadenas
     int decimales = 0, octales = 0, hexadecimales = 0;
-
-    /* AUTOMATA 1 */ 
     FILE* entrada;
     entrada = fopen(input,"rt");
     if(entrada == NULL){
@@ -40,7 +31,29 @@ int main(){
     printf("\nResultados:\nEnteros Decimales = %d\nEnteros Octales = %d\nEnteros Hexadecimales = %d\n\n", decimales, octales, hexadecimales);
 
     /* AUTOMATA 2 */ 
-    char inputManual[30];
 
-	return 0;
+    char stringHardcodeado[7] = "123456";
+    for(int i=0; i < strlen(stringHardcodeado); i++){
+        int numero = conversionCaracterInt(stringHardcodeado[i]);
+        printf("Caracter convertido a numero: %d\n", numero);
+    }
+
+    /* AUTOMATA 3 */
+
+    // INFIJO a POSTFIJO
+
+	char infijo[TamanioMaximoOperacion]; // = "2*2/2+1";
+	printf("\nIntroduzca una operacion aritmetica, sin parentesis:\n");
+	scanf("%s", &infijo);
+
+	char* postfijo = infijoConversionPostfijo(infijo);
+	printf("%s\n", postfijo); // funciona bien
+	
+	// CALCULADORA
+
+	int resultadoPostfijo = evaluarPostfijo(postfijo);  
+	free(postfijo);
+	printf("Resultado = %d\n", resultadoPostfijo); 
+
+    return EXIT_SUCCESS;
 }
