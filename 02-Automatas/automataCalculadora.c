@@ -4,8 +4,8 @@
 
 #define TamanioMaximoOperacion 100
 
+// Implemtacion de notacion Infija a Posftija para resolver problema de precedencia.
 
-// Implemtacion de notacion Infija a Posftija
 int esUnOperador(char caracter) {  // Funcion que determina si un caracter es un operador
     if (caracter == '+' || caracter == '-' || caracter == '*' || caracter == '/') {  
         return 1;  
@@ -56,45 +56,39 @@ char* infijoConversionPostfijo(char* infijo) // Conversion de Infijo a Postfijo
 		postfijo[j++] = stack[top--];
 	}
 
-	postfijo[j] = '\0'; // Fin de expresion 
+	postfijo[j] = '\0'; // Fin de cadena 
 	return postfijo;
 }
 
 
+
 // Implementacion Calculadora
+
 int stack[TamanioMaximoOperacion];  
 int top = -1;  
 
-void push(int item) {  
+void push(int numero) {  
     top++;  
-    stack[top] = item;  
+    stack[top] = numero;  
 }  
 
 int pop() {  
-    int item = stack[top];  
+    int numero = stack[top];  
     top--;  
-    return item;  
+    return numero;  
 }
-
-
 
 int evaluarPostfijo(char* cadena) {  
     int i = 0;  
     char caracter = cadena[i];  
     int operando1, operando2, resultado;  
   
-    while (caracter != '\0') {  
-        if (caracter >= '0' && caracter <= '9') {  
-            int validacionDeDecimal = columnaQuePertenece(caracter);
-			if (validacionDeDecimal == 1 || validacionDeDecimal == 2 || validacionDeDecimal == 3){
-				int numero = conversionCaracterInt(caracter);
-				push(numero); 
-			}
-			else{
-				printf("\nError Lexico");
-				return EXIT_FAILURE;
-			}
-        }  
+    while (caracter != '\0') {
+		int token = columnaQuePertenece(caracter);
+        if (token == 1 || token == 2 || token == 3) {  
+			int numero = conversionCaracterInt(caracter);
+			push(numero); 
+        } 
         else if (esUnOperador(caracter)) {  
             operando2 = pop();  
             operando1 = pop();  
@@ -105,7 +99,11 @@ int evaluarPostfijo(char* cadena) {
                 case '/': resultado = operando1 / operando2; break;  
             }  
             push(resultado);  
-        }  
+        }
+		else if (token == 6 || token == 5 || token == 4){
+			printf("Error Lexico\n");
+			return EXIT_FAILURE;
+		}
 		i++;  
         caracter = cadena[i];  
     }  

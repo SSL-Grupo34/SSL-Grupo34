@@ -42,18 +42,18 @@ int main(){
 
     // INFIJO a POSTFIJO
 
-	char infijo[TamanioMaximoOperacion]; // = "2*2/2+1";
+	char infijo[TamanioMaximoOperacion]; // = 2*2/2+1
 	printf("\nIntroduzca una operacion aritmetica, sin parentesis:\n");
 	scanf("%s", &infijo);
 
 	char* postfijo = infijoConversionPostfijo(infijo);
-	printf("%s\n", postfijo); // funciona bien
+	printf("Operacion aritmetica en notacion polaca inversa: %s\n", postfijo); // = 22*2/1+
 	
 	// CALCULADORA
 
 	int resultadoPostfijo = evaluarPostfijo(postfijo);  
 	free(postfijo);
-	printf("Resultado = %d\n", resultadoPostfijo); 
+    printf("Resultado = %d\n", resultadoPostfijo);
 
     return EXIT_SUCCESS;
 }
