@@ -26,3 +26,11 @@ inicio
 	cc := a + (b-2);
 	escribir (cc, a+4);
 fin
+
+flex.l:
+
+#include <stdlib.h>
+#ifndef yywrap
+static int yywrap(void) { return 1;}
+#endif
+

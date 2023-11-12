@@ -1,24 +1,38 @@
 %{
-#include <stdlib.h>
-#ifndef yywrap
-static int yywrap(void) { return 1;}
-#endif
+
+#include <stdio.h>
+#include “y.tab.h” /* GENERADO AUTOMÁTICAMENTE POR BISON */
+
 %}
-FINSENTENCIA ;{1}
-PALABRARESERVADA inicio|fin|leer|escribir
-CONSTANTE [1-9][0-9]*
-IDENTIFICADOR [a-zA-Z][a-zA-Z0-9]*
-OPERADOR \+|-
-ASIGNACION :=
+
+letra           [a-zA-Z]
+digito          [0-9]
+identificador   {letra}({letra}|{digito})*
+constEntera     {digito}({digito})*
+separador       [ \t]
+
 %%
-{FINSENTENCIA}      printf("Esto es un fin de sentencia\n");
-{PALABRARESERVADA}  printf("Esto es una palabra reservada\n");
-{CONSTANTE}         printf("Esto es un dato entero\n");
-{IDENTIFICADOR}     printf("Esto es un identificador\n");
-{OPERADOR}          printf("Esto es un operador aditivo\n");
-{ASIGNACION}        printf("Esto es una asignacion\n");
-.                   printf("Error lexico\n");
+
+FDT
+
+{separador}         {/* omitir */}
+inicio              {return INICIO;}
+fin                 {return FIN;}
+leer                {return LEER;}
+escribir            {return ESCRIBIR;}
+{constEntera}       {return CONSTANTE;}
+";"                 {return PUNTOYCOMA;}
+","                 {return COMA;}    
+":="                {return ASIGNACION;}
+"+"                 {return SUMA;}
+"-"                 {return RESTA;}
+{identificador}     {return ID;}
+"("                 {return PARENIZQUIERDO;}
+")"                 {return PARENDERECHO;}
+.                   ECHO;
+
 %%
-int main(){
-yylex();
+
+int yywrap(void) {
+    return 1;
 }

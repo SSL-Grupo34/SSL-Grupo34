@@ -1,0 +1,78 @@
+%{
+#include <stdio.h>
+%}
+
+%token CARACTER_PUNTUACION
+%token PALABRA_RESERVADA_INICIO
+%token PALABRA_RESERVADA_FIN
+%token PALABRA_RESERVADA_LEER
+%token PALABRA_RESERVADA_ESCRIBIR
+%token CONSTANTE_ENTERA
+%token OPERACION_ASIGNACION
+%token MAS
+%token MENOS
+%token IDENTIFICADOR
+%token PARENTESIS_APERTURA
+%token PARENTESIS_CLAUSURA
+%token NUEVA_LINEA
+
+%%
+
+objetivo: programa
+
+programa: PALABRA_RESERVADA_INICIO listaSentencias PALABRA_RESERVADA_FIN
+
+listaSentencias: sentencia {sentencia}
+
+sentencia: identificador OPERACION_ASIGNACION expresion CARACTER_PUNTUACION
+    | PALABRA_RESERVADA_LEER PARENTESIS_APERTURA listaIdentificadores PARENTESIS_CLAUSURA CARACTER_PUNTUACION
+    | PALABRA_RESERVADA_ESCRIBIR PARENTESIS_APERTURA listaExpresiones PARENTESIS_CLAUSURA CARACTER_PUNTUACION
+
+listaIdentificadores : identificador {, identificador}
+
+listaExpresiones : expresion {, expresion}
+
+expresion : primaria {(MAS|MENOS) primaria}
+
+primaria : identificador 
+    |CONSTANTE_ENTERA | PARENTESIS_APERTURA expresion PARENTESIS_CLAUSURA 
+
+identificador : IDENTIFICADOR 
+
+%%
+
+
+
+
+FLEX: 
+
+
+%{
+#include <stdio.h>
+#include “y.tab.h”
+%}
+finSentencia ;{1}
+palabraReservadaInicio inicio
+palabraReservadaFin fin
+palabraReservadaLeer leer
+palabraReservadaEscribir escribir
+letra [a-zA-Z]
+digito [0-9]
+identificador {letra}({letra}|{digito})*
+constanteEntera {digito}({digito})*
+%%
+{finSentencia} {return CARACTER_PUNTUACION;}
+{palabraReservadaInicio} {return PALABRA_RESERVADA_INICIO;}
+{palabraReservadaFin} {return PALABRA_RESERVADA_FIN;}
+{palabraReservadaLeer} {return PALABRA_RESERVADA_LEER;}
+{palabraReservadaEscribir} {return PALABRA_RESERVADA_ESCRIBIR;}
+{constanteEntera} {return CONSTANTE_ENTERA;}
+":=" {return OPERACION_ASIGNACION;}
+"+" {return MAS;}
+"-" {return MENOS;}
+{identificador} {return IDENTIFICADOR;}
+"(" {return PARENTESIS_APERTURA;}
+")" {return PARENTESIS_CLAUSURA;}
+[\n] {return NUEVA_LINEA;}
+. {printf("ERROR lexico")};
+%%
