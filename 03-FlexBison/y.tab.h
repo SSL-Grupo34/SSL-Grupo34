@@ -54,20 +54,19 @@ extern int yydebug;
     YYEOF = 0,                     /* "end of file"  */
     YYerror = 256,                 /* error  */
     YYUNDEF = 257,                 /* "invalid token"  */
-    FDT = 258,                     /* FDT  */
-    INICIO = 259,                  /* INICIO  */
-    FIN = 260,                     /* FIN  */
-    LEER = 261,                    /* LEER  */
-    ESCRIBIR = 262,                /* ESCRIBIR  */
-    ID = 263,                      /* ID  */
-    ASIGNACION = 264,              /* ASIGNACION  */
-    PUNTOYCOMA = 265,              /* PUNTOYCOMA  */
-    PARENIZQUIERDO = 266,          /* PARENIZQUIERDO  */
-    PARENDERECHO = 267,            /* PARENDERECHO  */
-    COMA = 268,                    /* COMA  */
-    CONSTANTE = 269,               /* CONSTANTE  */
-    SUMA = 270,                    /* SUMA  */
-    RESTA = 271                    /* RESTA  */
+    INICIO = 258,                  /* INICIO  */
+    FIN = 259,                     /* FIN  */
+    LEER = 260,                    /* LEER  */
+    ESCRIBIR = 261,                /* ESCRIBIR  */
+    ID = 262,                      /* ID  */
+    ASIGNACION = 263,              /* ASIGNACION  */
+    PUNTOYCOMA = 264,              /* PUNTOYCOMA  */
+    PARENIZQUIERDO = 265,          /* PARENIZQUIERDO  */
+    PARENDERECHO = 266,            /* PARENDERECHO  */
+    COMA = 267,                    /* COMA  */
+    CONSTANTE = 268,               /* CONSTANTE  */
+    SUMA = 269,                    /* SUMA  */
+    RESTA = 270                    /* RESTA  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -76,20 +75,19 @@ extern int yydebug;
 #define YYEOF 0
 #define YYerror 256
 #define YYUNDEF 257
-#define FDT 258
-#define INICIO 259
-#define FIN 260
-#define LEER 261
-#define ESCRIBIR 262
-#define ID 263
-#define ASIGNACION 264
-#define PUNTOYCOMA 265
-#define PARENIZQUIERDO 266
-#define PARENDERECHO 267
-#define COMA 268
-#define CONSTANTE 269
-#define SUMA 270
-#define RESTA 271
+#define INICIO 258
+#define FIN 259
+#define LEER 260
+#define ESCRIBIR 261
+#define ID 262
+#define ASIGNACION 263
+#define PUNTOYCOMA 264
+#define PARENIZQUIERDO 265
+#define PARENDERECHO 266
+#define COMA 267
+#define CONSTANTE 268
+#define SUMA 269
+#define RESTA 270
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED

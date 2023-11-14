@@ -13,8 +13,7 @@ constEntera     {digito}({digito})*
 %%
 
 espacio             {;}
-tabulacion          {;}            
-"FDT"               {return FDT;}
+tabulacion          {;}      
 "inicio"            {return INICIO;}
 "fin"               {return FIN;}
 "leer"              {return LEER;}

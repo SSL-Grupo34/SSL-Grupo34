@@ -3,16 +3,15 @@
 /* fichero instrucciones.y */
 #include <stdio.h>
 
+extern FILE* yyin;
+int analisisCorrecto = 1;
 int yylex(void);
 
 %}
 
-%token FDT INICIO FIN LEER ESCRIBIR ID ASIGNACION PUNTOYCOMA PARENIZQUIERDO PARENDERECHO COMA CONSTANTE SUMA RESTA
+%token INICIO FIN LEER ESCRIBIR ID ASIGNACION PUNTOYCOMA PARENIZQUIERDO PARENDERECHO COMA CONSTANTE SUMA RESTA
 
 %%
-
-objetivo : programa FDT
-;
 
 programa : INICIO listaSentencias FIN
 ;
@@ -49,19 +48,21 @@ operadorAditivo : SUMA
 
 %%
 
-yyerror (s) /* Llamada por yyparse ante un error */
-char *s;
+int main (int argc, char *argv[])
 {
-printf ("%s\n", s); /* Esta implementación por defecto nos valdrá */
-/* Si no creamos esta función, habrá que enlazar con –ly en el
-momento de compilar para usar una implementación por defecto */
+        yyin=fopen(argv[1],"r");
+        yyparse();
+        fclose(yyin);
+
+        if (analisisCorrecto){
+        printf("\nAnalisis finalizado correctamente\n");
+        }
+
+        return 0;
 }
 
-main()
-{
-// Acciones a ejecutar antes del análisis
-yyparse();
-//Acciones a ejecutar después del análisis
+int yyerror(const char *msg){
+        printf("\nFallo el analisis: %s\n",msg);
+        analisisCorrecto=0;
+        return 0;
 }
-
-

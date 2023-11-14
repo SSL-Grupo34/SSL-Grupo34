@@ -1,45 +1,68 @@
 %{
+
+/* fichero instrucciones.y */
 #include <stdio.h>
+
+int yylex(void);
+
 %}
 
-%token CARACTER_PUNTUACION
-%token PALABRA_RESERVADA_INICIO
-%token PALABRA_RESERVADA_FIN
-%token PALABRA_RESERVADA_LEER
-%token PALABRA_RESERVADA_ESCRIBIR
-%token CONSTANTE_ENTERA
-%token OPERACION_ASIGNACION
-%token MAS
-%token MENOS
-%token IDENTIFICADOR
-%token PARENTESIS_APERTURA
-%token PARENTESIS_CLAUSURA
-%token NUEVA_LINEA
+%token FDT INICIO FIN LEER ESCRIBIR ID ASIGNACION PUNTOYCOMA PARENIZQUIERDO PARENDERECHO COMA CONSTANTE SUMA RESTA
 
 %%
 
-objetivo: programa
+objetivo : programa FDT
+;
 
-programa: PALABRA_RESERVADA_INICIO listaSentencias PALABRA_RESERVADA_FIN
+programa : INICIO listaSentencias FIN
+;
 
-listaSentencias: sentencia {sentencia}
+listaSentencias : sentencia 
+                | sentencia sentencia
+;
 
-sentencia: identificador OPERACION_ASIGNACION expresion CARACTER_PUNTUACION
-    | PALABRA_RESERVADA_LEER PARENTESIS_APERTURA listaIdentificadores PARENTESIS_CLAUSURA CARACTER_PUNTUACION
-    | PALABRA_RESERVADA_ESCRIBIR PARENTESIS_APERTURA listaExpresiones PARENTESIS_CLAUSURA CARACTER_PUNTUACION
+sentencia : ID ASIGNACION expresion PUNTOYCOMA  
+            | LEER PARENIZQUIERDO listaIdentificadores PARENDERECHO PUNTOYCOMA
+            | ESCRIBIR PARENIZQUIERDO listaExpresiones PARENDERECHO PUNTOYCOMA
+;
 
-listaIdentificadores : identificador {, identificador}
+listaIdentificadores : ID 
+                    | ID COMA ID
+;        
 
-listaExpresiones : expresion {, expresion}
+listaExpresiones : expresion 
+                    | expresion COMA expresion
+;
 
-expresion : primaria {(MAS|MENOS) primaria}
+expresion : primaria 
+            | primaria operadorAditivo primaria
+;
 
-primaria : identificador 
-    |CONSTANTE_ENTERA | PARENTESIS_APERTURA expresion PARENTESIS_CLAUSURA 
+primaria : ID 
+        | CONSTANTE 
+        | PARENIZQUIERDO expresion PARENDERECHO
+;
 
-identificador : IDENTIFICADOR 
+operadorAditivo : SUMA 
+                | RESTA
+;
 
 %%
+
+yyerror (s) /* Llamada por yyparse ante un error */
+char *s;
+{
+printf ("%s\n", s); /* Esta implementación por defecto nos valdrá */
+/* Si no creamos esta función, habrá que enlazar con –ly en el
+momento de compilar para usar una implementación por defecto */
+}
+
+main()
+{
+// Acciones a ejecutar antes del análisis
+yyparse();
+//Acciones a ejecutar después del análisis
+}
 
 
 
@@ -49,30 +72,38 @@ FLEX:
 
 %{
 #include <stdio.h>
-#include “y.tab.h”
+#include "y.tab.h"
 %}
-finSentencia ;{1}
-palabraReservadaInicio inicio
-palabraReservadaFin fin
-palabraReservadaLeer leer
-palabraReservadaEscribir escribir
-letra [a-zA-Z]
-digito [0-9]
-identificador {letra}({letra}|{digito})*
-constanteEntera {digito}({digito})*
+
+espacio         (" ")+
+tabulacion      (\t)+
+letra           [a-zA-Z]
+digito          [0-9]
+identificador   {letra}({letra}|{digito})*
+constEntera     {digito}({digito})*
+
 %%
-{finSentencia} {return CARACTER_PUNTUACION;}
-{palabraReservadaInicio} {return PALABRA_RESERVADA_INICIO;}
-{palabraReservadaFin} {return PALABRA_RESERVADA_FIN;}
-{palabraReservadaLeer} {return PALABRA_RESERVADA_LEER;}
-{palabraReservadaEscribir} {return PALABRA_RESERVADA_ESCRIBIR;}
-{constanteEntera} {return CONSTANTE_ENTERA;}
-":=" {return OPERACION_ASIGNACION;}
-"+" {return MAS;}
-"-" {return MENOS;}
-{identificador} {return IDENTIFICADOR;}
-"(" {return PARENTESIS_APERTURA;}
-")" {return PARENTESIS_CLAUSURA;}
-[\n] {return NUEVA_LINEA;}
-. {printf("ERROR lexico")};
+
+espacio             {;}
+tabulacion          {;}            
+"FDT"               {return FDT;}
+"inicio"            {return INICIO;}
+"fin"               {return FIN;}
+"leer"              {return LEER;}
+"escribir"          {return ESCRIBIR;}
+{constEntera}       {return CONSTANTE;}
+{identificador}     {return ID;}
+";"                 {return PUNTOYCOMA;}
+","                 {return COMA;}    
+":="                {return ASIGNACION;}
+"+"                 {return SUMA;}
+"-"                 {return RESTA;}
+"("                 {return PARENIZQUIERDO;}
+")"                 {return PARENDERECHO;}
+.                   ECHO;
+
 %%
+
+int yywrap(void) {
+    return 1;
+}
