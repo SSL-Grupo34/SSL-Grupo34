@@ -70,17 +70,13 @@
 #line 1 "bison.y"
 
 
+/* fichero instrucciones.y */
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
-extern FILE* yyin;
-extern int yylineno;
 int yylex(void);
-int yyerror(const char *s);
 
 
-#line 84 "y.tab.c"
+#line 80 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -594,8 +590,8 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    18,    18,    20,    22,    22,    24,    25,    26,    28,
-      28,    30,    30,    32,    32,    34,    34,    34,    36,    36
+       0,    14,    14,    17,    20,    21,    24,    25,    26,    29,
+      30,    33,    34,    37,    38,    41,    42,    43,    46,    47
 };
 #endif
 
@@ -1173,7 +1169,7 @@ yyreduce:
   switch (yyn)
     {
 
-#line 1177 "y.tab.c"
+#line 1173 "y.tab.c"
 
       default: break;
     }
@@ -1366,10 +1362,22 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 38 "bison.y"
+#line 50 "bison.y"
 
 
-int yyerror(const char *msg){
-        printf("\nFallo el analisis en la linea: %d %s\n",yylineno,msg);
-        return 0;
+yyerror (s) /* Llamada por yyparse ante un error */
+char *s;
+{
+printf ("%s\n", s); /* Esta implementación por defecto nos valdrá */
+/* Si no creamos esta función, habrá que enlazar con –ly en el
+momento de compilar para usar una implementación por defecto */
 }
+
+main()
+{
+// Acciones a ejecutar antes del análisis
+yyparse();
+//Acciones a ejecutar después del análisis
+}
+
+

@@ -1,13 +1,9 @@
 %{
 
+/* fichero instrucciones.y */
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
-extern FILE* yyin;
-extern int yylineno;
 int yylex(void);
-int yyerror(const char *s);
 
 %}
 
@@ -16,38 +12,56 @@ int yyerror(const char *s);
 %%
 
 objetivo : programa FDT
+;
 
 programa : INICIO listaSentencias FIN
+;
 
-listaSentencias : sentencia | sentencia sentencia
+listaSentencias : sentencia 
+                | sentencia sentencia
+;
 
-sentencia : ID ASIGNACION expresion PUNTOYCOMA  |   
-            LEER PARENIZQUIERDO listaIdentificadores PARENDERECHO PUNTOYCOMA  |   
-            ESCRIBIR PARENIZQUIERDO listaExpresiones PARENDERECHO PUNTOYCOMA
+sentencia : ID ASIGNACION expresion PUNTOYCOMA  
+            | LEER PARENIZQUIERDO listaIdentificadores PARENDERECHO PUNTOYCOMA
+            | ESCRIBIR PARENIZQUIERDO listaExpresiones PARENDERECHO PUNTOYCOMA
+;
 
-listaIdentificadores : ID | ID COMA ID        
+listaIdentificadores : ID 
+                    | ID COMA ID
+;        
 
-listaExpresiones : expresion | expresion COMA expresion
+listaExpresiones : expresion 
+                    | expresion COMA expresion
+;
 
-expresion : primaria | primaria operadorAditivo primaria
+expresion : primaria 
+            | primaria operadorAditivo primaria
+;
 
-primaria : ID | CONSTANTE | PARENIZQUIERDO expresion PARENDERECHO
+primaria : ID 
+        | CONSTANTE 
+        | PARENIZQUIERDO expresion PARENDERECHO
+;
 
-operadorAditivo : SUMA | RESTA
+operadorAditivo : SUMA 
+                | RESTA
+;
 
 %%
 
-int main (int argc, char *argv[])
+yyerror (s) /* Llamada por yyparse ante un error */
+char *s;
 {
-        yyin=fopen(argv[1],"r"); // el primer argumento debe ser el codigo en micro a analizar
-        yyparse();
-        fclose(yyin);
+printf ("%s\n", s); /* Esta implementación por defecto nos valdrá */
+/* Si no creamos esta función, habrá que enlazar con –ly en el
+momento de compilar para usar una implementación por defecto */
+}
 
-        return 0;
+main()
+{
+// Acciones a ejecutar antes del análisis
+yyparse();
+//Acciones a ejecutar después del análisis
 }
 
 
-int yyerror(const char *msg){
-        printf("\nFallo el analisis en la linea: %d %s\n",yylineno,msg);
-        return 0;
-}
