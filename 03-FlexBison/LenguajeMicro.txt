@@ -27,10 +27,24 @@ inicio
 	escribir (cc, a+4);
 fin
 
-flex.l:
+Gramatica ::
 
-#include <stdlib.h>
-#ifndef yywrap
-static int yywrap(void) { return 1;}
-#endif
+objetivo : programa FDT
 
+programa : INICIO listaSentencias FIN
+
+listaSentencias : sentencia {sentencia}
+
+sentencia : ID ASIGNACION expresion PUNTOYCOMA  |   
+            LEER PARENIZQUIERDO listaIdentificadores PARENDERECHO PUNTOYCOMA  |   
+            ESCRIBIR PARENIZQUIERDO listaExpresiones PARENDERECHO PUNTOYCOMA
+
+listaIdentificadores : ID {COMA ID}        
+
+listaExpresiones : expresion {COMA expresion}
+
+expresion : primaria {operadorAditivo primaria}
+
+primaria : ID | CONSTANTE | PARENIZQUIERDO expresion PARENDERECHO
+
+operadorAditivo : SUMA | RESTA
