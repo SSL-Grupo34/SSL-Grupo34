@@ -73,12 +73,13 @@
 /* fichero instrucciones.y */
 #include <stdio.h>
 
+extern int yyleng;
 extern FILE* yyin;
 int analisisCorrecto = 1;
 int yylex(void);
 
 
-#line 82 "y.tab.c"
+#line 83 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -159,7 +160,21 @@ extern int yydebug;
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+union YYSTYPE
+{
+#line 13 "bison.y"
+
+   char cadena[30];
+   int entero;
+   struct info{
+       char cadena[40];
+       int linea;
+   }INFO;
+
+#line 175 "y.tab.c"
+
+};
+typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif
@@ -588,8 +603,8 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    16,    16,    19,    20,    23,    24,    25,    28,    29,
-      32,    33,    36,    37,    40,    41,    42,    45,    46
+       0,    26,    26,    29,    30,    33,    34,    35,    38,    39,
+      42,    43,    46,    47,    50,    51,    52,    55,    56
 };
 #endif
 
@@ -1166,7 +1181,7 @@ yyreduce:
   switch (yyn)
     {
 
-#line 1170 "y.tab.c"
+#line 1185 "y.tab.c"
 
       default: break;
     }
@@ -1359,7 +1374,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 49 "bison.y"
+#line 59 "bison.y"
 
 
 int main (int argc, char *argv[])
@@ -1369,14 +1384,14 @@ int main (int argc, char *argv[])
         fclose(yyin);
 
         if (analisisCorrecto){
-        printf("\nAnalisis finalizado correctamente\n");
+        printf("\nAnalisis finalizado\n");
         }
 
         return 0;
 }
 
 int yyerror(const char *msg){
-        printf("\nFallo el analisis: %s\n",msg);
+        printf("\nFallo el analisis en la linea: %d %s\n",yylval.INFO.linea,msg);
         analisisCorrecto=0;
         return 0;
 }

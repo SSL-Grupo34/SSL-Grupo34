@@ -1,8 +1,15 @@
+%option yylineno
+
 %{
+
 #include <stdio.h>
 #include "y.tab.h"
+
+void imprimirErrorLexico();
+
 %}
 
+separador       ([ \t””])+
 espacio         (" ")+
 tabulacion      (\t)+
 letra           [a-zA-Z]
@@ -12,8 +19,10 @@ constEntera     {digito}({digito})*
 
 %%
 
+separador           {/* omitir */}
 espacio             {;}
-tabulacion          {;}      
+tabulacion          {;}   
+[\n]                {;}   
 "inicio"            {return INICIO;}
 "fin"               {return FIN;}
 "leer"              {return LEER;}
@@ -27,7 +36,7 @@ tabulacion          {;}
 "-"                 {return RESTA;}
 "("                 {return PARENIZQUIERDO;}
 ")"                 {return PARENDERECHO;}
-.                   ECHO;
+.                   {strcpy(yylval.INFO.cadena,yytext);yylval.INFO.linea = yylineno;}
 
 %%
 
