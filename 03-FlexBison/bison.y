@@ -8,10 +8,12 @@ extern FILE* yyin;
 int analisisCorrecto = 1;
 int yylex(void);
 
+void procesarOperacion(int valor1, int valor2);
+void procesarID();
 %}
 
 %union {
-   char cadena[30];
+   char cadena[40];
    int entero;
    struct info{
        char cadena[40];
@@ -19,7 +21,8 @@ int yylex(void);
    }INFO;
 }
 
-%token INICIO FIN LEER ESCRIBIR ID ASIGNACION PUNTOYCOMA PARENIZQUIERDO PARENDERECHO COMA CONSTANTE SUMA RESTA
+%token INICIO FIN LEER ESCRIBIR ID ASIGNACION PUNTOYCOMA PARENIZQUIERDO PARENDERECHO COMA SUMA RESTA
+%token <entero> CONSTANTE
 
 %%
 
@@ -30,13 +33,13 @@ listaSentencias : sentencia
                 | sentencia sentencia
 ;
 
-sentencia : ID ASIGNACION expresion PUNTOYCOMA  
+sentencia : identificador ASIGNACION expresion PUNTOYCOMA  
             | LEER PARENIZQUIERDO listaIdentificadores PARENDERECHO PUNTOYCOMA
             | ESCRIBIR PARENIZQUIERDO listaExpresiones PARENDERECHO PUNTOYCOMA
 ;
 
-listaIdentificadores : ID 
-                    | ID COMA ID
+listaIdentificadores : identificador 
+                    | identificador COMA identificador
 ;        
 
 listaExpresiones : expresion 
@@ -44,16 +47,19 @@ listaExpresiones : expresion
 ;
 
 expresion : primaria 
-            | primaria operadorAditivo primaria
+            | primaria operadorAditivo primaria {procesarOperacion($<entero>1, $<entero>3);}
 ;
 
-primaria : ID 
+primaria : identificador 
         | CONSTANTE 
         | PARENIZQUIERDO expresion PARENDERECHO
 ;
 
 operadorAditivo : SUMA 
                 | RESTA
+;
+
+identificador : ID {procesarID();}
 ;
 
 %%
@@ -65,14 +71,29 @@ int main (int argc, char *argv[])
         fclose(yyin);
 
         if (analisisCorrecto){
-        printf("\nAnalisis finalizado\n");
+        printf("\nAnalisis finalizado correctamente\n");
         }
 
         return 0;
 }
 
-int yyerror(const char *msg){
-        printf("\nFallo el analisis en la linea: %d %s\n",yylval.INFO.linea,msg);
+void procesarID()
+{
+    if(yyleng > 32)
+    {
+        yyerror("Error Semantico, idenficador mayor a 32 caracteres");
+    }
+}
+
+void procesarOperacion(int valor1, int valor2)
+{
+    int resultado = valor1 + valor2;
+    printf("\nResultado de asignacion: %d\n", resultado);
+}
+
+int yyerror(const char *msg)
+{
+        printf("\nFallo en el analisis \n\t Linea: %d \n\t Error:%s\n",yylval.INFO.linea,msg);
         analisisCorrecto=0;
         return 0;
 }

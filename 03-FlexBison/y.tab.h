@@ -64,9 +64,9 @@ extern int yydebug;
     PARENIZQUIERDO = 265,          /* PARENIZQUIERDO  */
     PARENDERECHO = 266,            /* PARENDERECHO  */
     COMA = 267,                    /* COMA  */
-    CONSTANTE = 268,               /* CONSTANTE  */
-    SUMA = 269,                    /* SUMA  */
-    RESTA = 270                    /* RESTA  */
+    SUMA = 268,                    /* SUMA  */
+    RESTA = 269,                   /* RESTA  */
+    CONSTANTE = 270                /* CONSTANTE  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -85,17 +85,17 @@ extern int yydebug;
 #define PARENIZQUIERDO 265
 #define PARENDERECHO 266
 #define COMA 267
-#define CONSTANTE 268
-#define SUMA 269
-#define RESTA 270
+#define SUMA 268
+#define RESTA 269
+#define CONSTANTE 270
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 13 "bison.y"
+#line 15 "bison.y"
 
-   char cadena[30];
+   char cadena[40];
    int entero;
    struct info{
        char cadena[40];

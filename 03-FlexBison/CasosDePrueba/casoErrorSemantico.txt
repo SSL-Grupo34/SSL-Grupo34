@@ -1,0 +1,4 @@
+inicio
+    b := 1
+	a := 1 + E;
+fin

@@ -841,12 +841,12 @@ YY_RULE_SETUP
 case 9:
 YY_RULE_SETUP
 #line 30 "flex.l"
-{return CONSTANTE;}
+{strcpy(yylval.INFO.cadena,yytext);yylval.INFO.linea = yylineno; yylval.entero=atoi(yytext); return CONSTANTE;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
 #line 31 "flex.l"
-{return ID;}
+{strcpy(yylval.INFO.cadena,yytext);yylval.INFO.linea = yylineno; strcpy(yylval.cadena,yytext); return ID;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP

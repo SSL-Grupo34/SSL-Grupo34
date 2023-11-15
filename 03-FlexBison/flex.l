@@ -27,8 +27,8 @@ tabulacion          {;}
 "fin"               {return FIN;}
 "leer"              {return LEER;}
 "escribir"          {return ESCRIBIR;}
-{constEntera}       {return CONSTANTE;}
-{identificador}     {return ID;}
+{constEntera}       {strcpy(yylval.INFO.cadena,yytext);yylval.INFO.linea = yylineno; yylval.entero=atoi(yytext); return CONSTANTE;}
+{identificador}     {strcpy(yylval.INFO.cadena,yytext);yylval.INFO.linea = yylineno; strcpy(yylval.cadena,yytext); return ID;}
 ";"                 {return PUNTOYCOMA;}
 ","                 {return COMA;}    
 ":="                {return ASIGNACION;}

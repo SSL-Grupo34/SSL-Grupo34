@@ -1,0 +1,3 @@
+inicio 
+	aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa := 1 + 2; 
+fin
