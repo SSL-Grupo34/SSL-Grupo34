@@ -11,6 +11,9 @@ letra           [a-zA-Z]
 digito          [0-9]
 identificador   {letra}({letra}|{digito})*
 constEntera     {digito}({digito})*
+nuevaLinea      (\n)+
+tab             (\t)+
+espacio         (" ")+
 %%
 
 "inicio"            {return INICIO;}
@@ -26,9 +29,10 @@ constEntera     {digito}({digito})*
 "-"                 {return RESTA;}
 "("                 {return PARENIZQUIERDO;}
 ")"                 {return PARENDERECHO;}
-
-[\s\t\n]            {;}  
-.                   ECHO;
+{nuevaLinea}        {;}
+{tab}               {;}
+{espacio}           {;}
+.                   {strcpy(yylval.INFO.cadena,yytext);yylval.INFO.linea = yylineno; yylval.entero=atoi(yytext); yyerror("Error Lexico");}
 
 %%
 

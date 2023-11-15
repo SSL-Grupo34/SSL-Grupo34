@@ -1,0 +1,1 @@
+inicio   1a := 1 ;    fin

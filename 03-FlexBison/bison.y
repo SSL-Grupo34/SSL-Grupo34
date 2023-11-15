@@ -83,7 +83,7 @@ int main (int argc, char *argv[])
 void procesarID()
 {
     if(strlen(yylval.INFO.cadena) > 32)
-    {
+    {   
         yyerror("Error Semantico, idenficador mayor a 32 caracteres");
     }
 }
