@@ -2,6 +2,8 @@
 
 /* fichero instrucciones.y */
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
 extern int yyleng;
 extern FILE* yyin;
@@ -10,6 +12,7 @@ int yylex(void);
 
 void procesarOperacion(int valor1, int valor2);
 void procesarID();
+int yyerror(const char *msg);
 %}
 
 %union {
@@ -30,27 +33,27 @@ programa : INICIO listaSentencias FIN
 ;
 
 listaSentencias : sentencia 
-                | sentencia sentencia
+                | listaSentencias sentencia
 ;
 
-sentencia : identificador ASIGNACION expresion PUNTOYCOMA  
+sentencia : identificador ASIGNACION expresion PUNTOYCOMA {procesarID();}
             | LEER PARENIZQUIERDO listaIdentificadores PARENDERECHO PUNTOYCOMA
             | ESCRIBIR PARENIZQUIERDO listaExpresiones PARENDERECHO PUNTOYCOMA
 ;
 
 listaIdentificadores : identificador 
-                    | identificador COMA identificador
+                    | listaIdentificadores COMA identificador
 ;        
 
 listaExpresiones : expresion 
-                    | expresion COMA expresion
+                    | listaExpresiones COMA expresion
 ;
 
 expresion : primaria 
-            | primaria operadorAditivo primaria {procesarOperacion($<entero>1, $<entero>3);}
+            | expresion operadorAditivo primaria {procesarOperacion($<entero>1, $<entero>3);}
 ;
 
-primaria : identificador 
+primaria : identificador
         | CONSTANTE 
         | PARENIZQUIERDO expresion PARENDERECHO
 ;
@@ -70,16 +73,16 @@ int main (int argc, char *argv[])
         yyparse();
         fclose(yyin);
 
-        if (analisisCorrecto){
+        
         printf("\nAnalisis finalizado correctamente\n");
-        }
+        
 
         return 0;
 }
 
 void procesarID()
 {
-    if(yyleng > 32)
+    if(strlen(yylval.INFO.cadena) > 32)
     {
         yyerror("Error Semantico, idenficador mayor a 32 caracteres");
     }
@@ -94,6 +97,6 @@ void procesarOperacion(int valor1, int valor2)
 int yyerror(const char *msg)
 {
         printf("\nFallo en el analisis \n\t Linea: %d \n\t Error:%s\n",yylval.INFO.linea,msg);
-        analisisCorrecto=0;
+        exit(1);
         return 0;
 }

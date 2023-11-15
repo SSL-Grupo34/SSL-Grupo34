@@ -72,6 +72,8 @@
 
 /* fichero instrucciones.y */
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
 extern int yyleng;
 extern FILE* yyin;
@@ -80,8 +82,9 @@ int yylex(void);
 
 void procesarOperacion(int valor1, int valor2);
 void procesarID();
+int yyerror(const char *msg);
 
-#line 85 "y.tab.c"
+#line 88 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -164,7 +167,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 15 "bison.y"
+#line 18 "bison.y"
 
    char cadena[40];
    int entero;
@@ -173,7 +176,7 @@ union YYSTYPE
        int linea;
    }INFO;
 
-#line 177 "y.tab.c"
+#line 180 "y.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -546,7 +549,7 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  9
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   32
+#define YYLAST   39
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  16
@@ -606,8 +609,8 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    29,    29,    32,    33,    36,    37,    38,    41,    42,
-      45,    46,    49,    50,    53,    54,    55,    58,    59,    62
+       0,    32,    32,    35,    36,    39,    40,    41,    44,    45,
+      48,    49,    52,    53,    56,    57,    58,    61,    62,    65
 };
 #endif
 
@@ -652,10 +655,10 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-       0,     6,    14,     7,     8,   -14,    12,     6,    11,   -14,
-      13,    -5,   -14,   -14,    -5,    10,    15,    -5,   -14,    17,
-      18,    -6,   -14,    16,    20,    13,    21,    22,    -5,   -14,
-     -14,    -5,   -14,   -14,   -14,   -14,   -14,   -14,   -14
+       7,    22,    32,    -8,    23,   -14,    14,   -14,    26,   -14,
+      15,    -4,   -14,   -14,    -4,     2,   -14,    -4,   -14,    19,
+      -6,   -14,   -14,     3,    27,    15,    12,    28,    -4,   -14,
+     -14,    -4,   -14,   -14,   -14,   -14,   -14,    -6,   -14
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -672,7 +675,7 @@ static const yytype_int8 yydefact[] =
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -14,   -14,   -14,    19,   -14,   -14,   -13,    -9,   -14,    -1
+     -14,   -14,   -14,    29,   -14,   -14,   -13,     8,   -14,    -1
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
@@ -686,18 +689,18 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-       8,    23,     5,     1,    26,    17,     8,    29,    30,    16,
-      18,     3,     4,     5,     9,    37,    12,    10,    11,    14,
-       5,    24,    38,     0,    34,    32,    13,    25,    27,    33,
-      28,    36,    35
+       8,    23,    10,     5,    26,     8,    17,    29,    30,    16,
+       1,    18,    32,    24,    25,    37,    29,    30,    12,     3,
+       4,     5,     5,    35,    34,    29,    30,     3,     4,     5,
+      27,    28,     9,    11,    14,    13,    33,    36,     0,    38
 };
 
 static const yytype_int8 yycheck[] =
 {
-       1,    14,     7,     3,    17,    10,     7,    13,    14,    10,
-      15,     5,     6,     7,     0,    28,     4,    10,    10,     8,
-       7,    11,    31,    -1,    25,     9,     7,    12,    11,     9,
-      12,     9,    11
+       1,    14,    10,     7,    17,     6,    10,    13,    14,    10,
+       3,    15,     9,    11,    12,    28,    13,    14,     4,     5,
+       6,     7,     7,    11,    25,    13,    14,     5,     6,     7,
+      11,    12,     0,    10,     8,     6,     9,     9,    -1,    31
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
@@ -1184,20 +1187,26 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-  case 13: /* expresion: primaria operadorAditivo primaria  */
-#line 50 "bison.y"
-                                                {procesarOperacion((yyvsp[-2].entero), (yyvsp[0].entero));}
-#line 1191 "y.tab.c"
+  case 5: /* sentencia: identificador ASIGNACION expresion PUNTOYCOMA  */
+#line 39 "bison.y"
+                                                          {procesarID();}
+#line 1194 "y.tab.c"
+    break;
+
+  case 13: /* expresion: expresion operadorAditivo primaria  */
+#line 53 "bison.y"
+                                                 {procesarOperacion((yyvsp[-2].entero), (yyvsp[0].entero));}
+#line 1200 "y.tab.c"
     break;
 
   case 19: /* identificador: ID  */
-#line 62 "bison.y"
+#line 65 "bison.y"
                    {procesarID();}
-#line 1197 "y.tab.c"
+#line 1206 "y.tab.c"
     break;
 
 
-#line 1201 "y.tab.c"
+#line 1210 "y.tab.c"
 
       default: break;
     }
@@ -1390,7 +1399,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 65 "bison.y"
+#line 68 "bison.y"
 
 
 int main (int argc, char *argv[])
@@ -1399,16 +1408,16 @@ int main (int argc, char *argv[])
         yyparse();
         fclose(yyin);
 
-        if (analisisCorrecto){
+        
         printf("\nAnalisis finalizado correctamente\n");
-        }
+        
 
         return 0;
 }
 
 void procesarID()
 {
-    if(yyleng > 32)
+    if(strlen(yylval.INFO.cadena) > 32)
     {
         yyerror("Error Semantico, idenficador mayor a 32 caracteres");
     }
@@ -1423,6 +1432,6 @@ void procesarOperacion(int valor1, int valor2)
 int yyerror(const char *msg)
 {
         printf("\nFallo en el analisis \n\t Linea: %d \n\t Error:%s\n",yylval.INFO.linea,msg);
-        analisisCorrecto=0;
+        exit(1);
         return 0;
 }
