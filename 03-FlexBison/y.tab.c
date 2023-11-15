@@ -75,6 +75,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+extern int yylineno;
 extern int yyleng;
 extern FILE* yyin;
 int analisisCorrecto = 1;
@@ -84,7 +85,7 @@ void procesarOperacion(int valor1, int valor2);
 void procesarID();
 int yyerror(const char *msg);
 
-#line 88 "y.tab.c"
+#line 89 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -167,7 +168,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 18 "bison.y"
+#line 19 "bison.y"
 
    char cadena[40];
    int entero;
@@ -176,7 +177,7 @@ union YYSTYPE
        int linea;
    }INFO;
 
-#line 180 "y.tab.c"
+#line 181 "y.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -609,8 +610,8 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    32,    32,    35,    36,    39,    40,    41,    44,    45,
-      48,    49,    52,    53,    56,    57,    58,    61,    62,    65
+       0,    33,    33,    36,    37,    40,    41,    42,    45,    46,
+      49,    50,    53,    54,    57,    58,    59,    62,    63,    66
 };
 #endif
 
@@ -1188,25 +1189,25 @@ yyreduce:
   switch (yyn)
     {
   case 5: /* sentencia: identificador ASIGNACION expresion PUNTOYCOMA  */
-#line 39 "bison.y"
+#line 40 "bison.y"
                                                           {procesarID();}
-#line 1194 "y.tab.c"
+#line 1195 "y.tab.c"
     break;
 
   case 13: /* expresion: expresion operadorAditivo primaria  */
-#line 53 "bison.y"
+#line 54 "bison.y"
                                                  {procesarOperacion((yyvsp[-2].entero), (yyvsp[0].entero));}
-#line 1200 "y.tab.c"
+#line 1201 "y.tab.c"
     break;
 
   case 19: /* identificador: ID  */
-#line 65 "bison.y"
+#line 66 "bison.y"
                    {procesarID();}
-#line 1206 "y.tab.c"
+#line 1207 "y.tab.c"
     break;
 
 
-#line 1210 "y.tab.c"
+#line 1211 "y.tab.c"
 
       default: break;
     }
@@ -1399,7 +1400,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 68 "bison.y"
+#line 69 "bison.y"
 
 
 int main (int argc, char *argv[])
@@ -1431,7 +1432,7 @@ void procesarOperacion(int valor1, int valor2)
 
 int yyerror(const char *msg)
 {
-        printf("\nFallo en el analisis \n\t Linea: %d \n\t Error:%s\n", yylval.INFO.linea, msg);
+        printf("\nFallo en el analisis \n\t Linea: %d \n\t Error:%s\n", yylineno, msg);
         exit(1);
         return 0;
 }

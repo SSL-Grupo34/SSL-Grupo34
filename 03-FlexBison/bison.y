@@ -5,6 +5,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+extern int yylineno;
 extern int yyleng;
 extern FILE* yyin;
 int analisisCorrecto = 1;
@@ -96,7 +97,7 @@ void procesarOperacion(int valor1, int valor2)
 
 int yyerror(const char *msg)
 {
-        printf("\nFallo en el analisis \n\t Linea: %d \n\t Error:%s\n", yylval.INFO.linea, msg);
+        printf("\nFallo en el analisis \n\t Linea: %d \n\t Error:%s\n", yylineno, msg);
         exit(1);
         return 0;
 }

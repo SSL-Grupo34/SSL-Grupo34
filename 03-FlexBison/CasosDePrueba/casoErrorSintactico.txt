@@ -1,5 +1,4 @@
 inicio
 	a := 1;
 	b := 2;
-	c := 3
-fin
+	c := 3 fin
