@@ -32,7 +32,7 @@ espacio         (" ")+
 {nuevaLinea}        {;}
 {tab}               {;}
 {espacio}           {;}
-.                   {strcpy(yylval.INFO.cadena,yytext);yylval.INFO.linea = yylineno; yylval.entero=atoi(yytext); yyerror("Error Lexico");}
+.                   {strcpy(yylval.INFO.cadena,yytext);yylval.INFO.linea = yylineno; yyerror("Error Lexico");}
 
 %%
 

@@ -867,7 +867,7 @@ YY_RULE_SETUP
 case 17:
 YY_RULE_SETUP
 #line 35 "flex.l"
-{strcpy(yylval.INFO.cadena,yytext);yylval.INFO.linea = yylineno; yylval.entero=atoi(yytext); yyerror("Error Lexico");}
+{strcpy(yylval.INFO.cadena,yytext);yylval.INFO.linea = yylineno; yyerror("Error Lexico");}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP

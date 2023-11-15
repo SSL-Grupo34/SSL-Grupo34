@@ -96,7 +96,7 @@ void procesarOperacion(int valor1, int valor2)
 
 int yyerror(const char *msg)
 {
-        printf("\nFallo en el analisis \n\t Linea: %d \n\t Error:%s\n",yylval.INFO.linea,msg);
+        printf("\nFallo en el analisis \n\t Linea: %d \n\t Error:%s\n", yylval.INFO.linea, msg);
         exit(1);
         return 0;
 }
