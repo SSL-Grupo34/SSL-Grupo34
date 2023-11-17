@@ -10,7 +10,8 @@ extern int yyleng;
 extern FILE* yyin;
 int yylex(void);
 
-void procesarOperacion(int valor1 ,int valor2);
+void procesarOperacionSuma(int valor1 ,int valor2);
+void procesarOperacionResta(int valor1 ,int valor2);
 void procesarID();
 int yyerror(const char *msg);
 %}
@@ -51,16 +52,13 @@ listaExpresiones : expresion
 ;
 
 expresion : primaria 
-            | expresion operadorAditivo primaria {procesarOperacion($<entero>1 ,$<entero>3);}
+            | expresion SUMA primaria {procesarOperacionSuma($<entero>1 ,$<entero>3);}
+            | expresion RESTA primaria {procesarOperacionResta($<entero>1 ,$<entero>3);}
 ;
 
 primaria : identificador
         | CONSTANTE 
         | PARENIZQUIERDO expresion PARENDERECHO
-;
-
-operadorAditivo : SUMA 
-                | RESTA
 ;
 
 identificador : ID {procesarID();}
@@ -89,9 +87,15 @@ void procesarID()
     }
 }
 
-void procesarOperacion(int valor1 ,int valor2)
+void procesarOperacionSuma(int valor1 ,int valor2)
 {
     int resultado = valor1 + valor2;
+    printf("\nResultado de asignacion: %d\n", resultado);
+    
+}
+void procesarOperacionResta(int valor1 ,int valor2)
+{
+    int resultado = valor1 - valor2;
     printf("\nResultado de asignacion: %d\n", resultado);
     
 }
