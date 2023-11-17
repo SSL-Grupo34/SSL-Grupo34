@@ -8,10 +8,9 @@
 extern int yylineno;
 extern int yyleng;
 extern FILE* yyin;
-int analisisCorrecto = 1;
 int yylex(void);
 
-void procesarOperacion(int valor1, int valor2);
+void procesarOperacion(int valor1 ,int valor2);
 void procesarID();
 int yyerror(const char *msg);
 %}
@@ -25,8 +24,9 @@ int yyerror(const char *msg);
    }INFO;
 }
 
-%token INICIO FIN LEER ESCRIBIR ID ASIGNACION PUNTOYCOMA PARENIZQUIERDO PARENDERECHO COMA SUMA RESTA
+%token INICIO FIN LEER ESCRIBIR ID ASIGNACION PUNTOYCOMA PARENIZQUIERDO PARENDERECHO COMA 
 %token <entero> CONSTANTE
+%token <cadena> SUMA RESTA
 
 %%
 
@@ -37,7 +37,7 @@ listaSentencias : sentencia
                 | listaSentencias sentencia
 ;
 
-sentencia : identificador ASIGNACION expresion PUNTOYCOMA {procesarID();}
+sentencia : identificador ASIGNACION expresion PUNTOYCOMA 
             | LEER PARENIZQUIERDO listaIdentificadores PARENDERECHO PUNTOYCOMA
             | ESCRIBIR PARENIZQUIERDO listaExpresiones PARENDERECHO PUNTOYCOMA
 ;
@@ -51,7 +51,7 @@ listaExpresiones : expresion
 ;
 
 expresion : primaria 
-            | expresion operadorAditivo primaria {procesarOperacion($<entero>1, $<entero>3);}
+            | expresion operadorAditivo primaria {procesarOperacion($<entero>1 ,$<entero>3);}
 ;
 
 primaria : identificador
@@ -89,10 +89,11 @@ void procesarID()
     }
 }
 
-void procesarOperacion(int valor1, int valor2)
+void procesarOperacion(int valor1 ,int valor2)
 {
     int resultado = valor1 + valor2;
     printf("\nResultado de asignacion: %d\n", resultado);
+    
 }
 
 int yyerror(const char *msg)
