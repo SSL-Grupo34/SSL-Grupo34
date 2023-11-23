@@ -1,4 +1,4 @@
 inicio
-	a := 1;
-	escribir (b, w)
+	b := casdasdasdasdcasdasdasdasdcasdasdasdasdcasdasdasdasdcasdasdasdasdcasdasdasdasdcasdasdasdasdcasdasdasdasd;
+	a := 1 + 2
 fin
